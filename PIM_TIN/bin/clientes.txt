@@ -1,0 +1,5 @@
+
+Nome: Bmtech
+CNPJ: 123123123123123
+Endereço: Avenida Arthur Fonseca
+----------------------------------

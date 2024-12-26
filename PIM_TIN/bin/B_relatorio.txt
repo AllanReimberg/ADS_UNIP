@@ -1,0 +1,5 @@
+RELATÓRIO: B
+Relatório criado em: 29/11/2024 às 10:21
+Descrição: falha na funcao
+Auditor: Allan
+----------------------------------
