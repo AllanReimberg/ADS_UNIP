@@ -1,0 +1,35 @@
+function preencherDocumentoNaPasta() {
+  var planilha = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var dados = planilha.getDataRange().getValues(); // Obtém os dados da planilha
+
+  var docModeloID = "ID DO DOC"; 
+  var pastaID = "ID DA PASTA"; 
+  var pasta = DriveApp.getFolderById(pastaID); 
+  
+  for (var i = 1; i < dados.length; i++) { // Começa na linha 2 (ignora cabeçalho)
+    var nome = dados[i][0]; // Nome na Coluna A
+    var sn = dados[i][1]; // Número de Série na Coluna B
+
+    // Copia o modelo para criar um novo documento
+    var novoDoc = DriveApp.getFileById(docModeloID).makeCopy("Documento - " + nome, pasta);
+    var doc = DocumentApp.openById(novoDoc.getId());
+    var body = doc.getBody();
+
+    // Substitui as variáveis pelos valores da planilha
+    body.replaceText("{{NOME}}", nome);
+    body.replaceText("{{SN}}", sn);
+
+    doc.saveAndClose(); // Salva e fecha o documento
+
+    // Converte o documento para PDF
+    var arquivoPDF = DriveApp.getFileById(novoDoc.getId()).getAs('application/pdf');
+
+    // Salva o PDF na mesma pasta
+    pasta.createFile(arquivoPDF).setName("Documento - " + nome + ".pdf");
+
+    // Apaga o arquivo Docs original
+    DriveApp.getFileById(novoDoc.getId()).setTrashed(true);
+
+    Logger.log("Documento em PDF criado e arquivo Docs excluído para " + nome + " na pasta.");
+  }
+}
